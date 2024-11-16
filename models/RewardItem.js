@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const RewardItemSchema = mongoose.Schema({
     name:{
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true
     },
     cost:{
         type: Number,

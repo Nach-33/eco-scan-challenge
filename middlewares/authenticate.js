@@ -1,7 +1,6 @@
 const { header } = require("express-validator");
 const asyncHandler = require("./asyncHandler");
 const jwt = require("jsonwebtoken");
-const Admin = require("../models/Admin");
 const User = require("../models/User");
 const ErrorResponse = require('../utils/ErrorResponse');
 require("dotenv").config();
@@ -21,28 +20,35 @@ exports.checkAuthorizationHeaders = [
       const access_token = value.split("Bearer ")[1];
       req.access_token = jwt.verify(access_token, process.env.JWT_SECRET);
       if (!req.access_token) {
-        throw new ErrorResponse("Session Expired! Please login again");
+        throw new ErrorResponse("Session Expired! Please login again", 403);
       }
       return true;
     }),
 ];
 
 exports.authenticateAdmin = asyncHandler(async (req, res, next) => {
-  const admin_doc = await Admin.findOne(
-    { _id: req.access_token.id },
-    { _id: 1, name: 1 }
+  const user_doc = await User.findOne(
+    { _id: req.access_token.id }
   );
 
-  if (!admin_doc) {
+  if (!user_doc) {
     throw new ErrorResponse(
       `Oops! Maybe your account disabled or permanently deleted.`,
       403
     );
   }
+  
+  if(!user_doc.isAdmin){
+    throw new ErrorResponse(
+      `Oops! You are not an Admin.`,
+      401
+    )
+  }
 
-  req.auth_user = {
-    static_id: admin_doc._id,
-    name: admin_doc.name,
+  req.authUser = {
+    staticId: user_doc._id,
+    name: user_doc.name,
+    isAdmin: user_doc.isAdmin
   };
 
   next();
@@ -61,9 +67,10 @@ exports.authenticateUser = asyncHandler(async (req, res, next) => {
     );
   }
 
-  req.auth_user = {
-    static_id: user_doc._id,
+  req.authUser = {
+    staticId: user_doc._id,
     name: user_doc.name,
+    isAdmin: user_doc.isAdmin
   };
 
   next();

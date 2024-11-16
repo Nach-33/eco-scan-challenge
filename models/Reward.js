@@ -6,14 +6,14 @@ const RewardSchema = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
+        item: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "RewardItem",
+        },
         cost:{
             type: Number,
             required: true
         },
-        item: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "RewardItem",
-        }
     },
     { timestamps: true }
 );

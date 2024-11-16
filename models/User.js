@@ -17,7 +17,7 @@ const UserSchema = mongoose.Schema(
         },
         transactions: [
             {
-                contest_id: {
+                transaction_id: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "Transaction",
                 },
@@ -25,7 +25,7 @@ const UserSchema = mongoose.Schema(
         ],
         rewards: [
             {
-                question_id: {
+                reward_id: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "Reward",
                 },
