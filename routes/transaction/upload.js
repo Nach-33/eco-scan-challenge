@@ -13,6 +13,7 @@ router.route('/').post(
     upload.fields([{ name: "image", maxCount: 1 }]),
 
     checkUploadClothPic,
+    validateRequestBody,
 
     uploadClothPic
 );

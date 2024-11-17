@@ -51,7 +51,7 @@ exports.CreateRewardItem = asyncHandler(async (req, res) => {
         image: imageURL,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Reward Item Created Successfully",
         rewardItem: newRewardItem,
     });

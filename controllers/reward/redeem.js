@@ -47,7 +47,7 @@ exports.redeemRewardItem = asyncHandler(async (req, res) => {
         },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Reward Redeemed Successfully",
         reward: newRewardDoc,
     });

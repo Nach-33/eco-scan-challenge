@@ -40,7 +40,7 @@ exports.uploadClothPic = asyncHandler(async (req, res) => {
         }
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         message: "Transaction Done Successfully",
         url: imageURL,
         result: result,
