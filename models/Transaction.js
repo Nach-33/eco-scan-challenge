@@ -17,6 +17,7 @@ const TransactionSchema = mongoose.Schema(
         tag: {
             type: String,
             required: true,
+            default: "No Tag"
         },
     },
     { timestamps: true }
