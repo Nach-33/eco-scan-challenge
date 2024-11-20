@@ -28,34 +28,36 @@ EcoScan is a web application designed to help users understand the environmental
    ```
 
 3. **Setup Environment Variables and Secret Files**
-   1. Create .env file in backend and provide your environment variables.
+   - **Backend**:
+   1. Create .env file and provide your environment variables:
    ```env
-      PORT = 4000
-      API_URI = http://localhost:4000/api
-      FRONTEND_URI = http://localhost:3000
-      USER_AUTH_REDIRECT_URI = http://localhost:4000/api/user/auth/redirect
-      MONGO_URI = [YOUR MONGODB CONNECTION URI STRING]
-      OAUTH_CLIENT_ID = [YOUR GOOGLE CLOUD CONSOLE PROJECT OAUTH_CLIENT_ID]
-      OAUTH_CLIENT_SECRET = [YOUR GOOGLE CLOUD CONSOLE PROJECT OAUTH_CLIENT_SECRET]
-      JWT_SECRET = [YOUR JWT_SECRET]
-      FIREBASE_STORAGE_BUCKET = [YOUR FIREBASE_STORAGE_BUCKET_URI]
+   PORT = 4000
+   API_URI = http://localhost:4000/api
+   FRONTEND_URI = http://localhost:3000
+   USER_AUTH_REDIRECT_URI = http://localhost:4000/api/user/auth/redirect
+   MONGO_URI = [YOUR MONGODB CONNECTION URI STRING]
+   OAUTH_CLIENT_ID = [YOUR GOOGLE CLOUD CONSOLE PROJECT OAUTH_CLIENT_ID]
+   OAUTH_CLIENT_SECRET = [YOUR GOOGLE CLOUD CONSOLE PROJECT OAUTH_CLIENT_SECRET]
+   JWT_SECRET = [YOUR JWT_SECRET]
+   FIREBASE_STORAGE_BUCKET = [YOUR FIREBASE_STORAGE_BUCKET_URI]
    ```
 
-   2. Add firebase-adminsdk.json downloaded from your firebase cloud console storage settings in backend root directory.
-
-   3. Create .env file in frontend and provide your environment variables.
+   2. Add firebase-adminsdk.json downloaded from your firebase cloud console storage settings in root directory
+   
+   - **Frontend**:
+      Create .env file and provide your environment variables:
    ```env
-      VITE_APP_VERSION=v1.0.0
-      GENERATE_SOURCEMAP=false
+   VITE_APP_VERSION=v1.0.0
+   GENERATE_SOURCEMAP=false
 
-      ## Backend API URL
-      PUBLIC_URL = https://mantisdashboard.io/
-      VITE_APP_BASE_NAME = /
-      VITE_APP_BACKEND_URI = http://localhost:4000/api
-      VITE_APP_FRONTEND_URI = http://localhost:3000/
+   ## Backend API URL
+   PUBLIC_URL = https://mantisdashboard.io/
+   VITE_APP_BASE_NAME = /
+   VITE_APP_BACKEND_URI = http://localhost:4000/api
+   VITE_APP_FRONTEND_URI = http://localhost:3000/
    ```
 
-3. **Run the Application**
+   3. **Run the Application**
    - **Backend**: Start the backend server:
      ```bash
      npm start
@@ -64,6 +66,14 @@ EcoScan is a web application designed to help users understand the environmental
      ```bash
      npm run start
      ```
+
+4. **Create Admin User**
+   - **Frontend**:
+     Register as a regular user.
+
+   - **Backend**:
+     Update the mongodb document and set the isAdmin flag to true.
+   
 ---
 <!-- 
 ## 🌱 Carbon Score Assumptions
