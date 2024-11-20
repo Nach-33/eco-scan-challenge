@@ -5,28 +5,27 @@ const User = require("../../models/User");
 const Transaction = require("../../models/Transaction");
 const { body } = require("express-validator");
 const ErrorResponse = require("../../utils/ErrorResponse");
-const axios = require('axios');
+const axios = require("axios");
 
 async function checkFileAvailability(url) {
-  const maxRetries = 10; // Adjust the maximum number of retries as needed
-  const retryInterval = 500; // Adjust the retry interval in milliseconds
+    const maxRetries = 10; // Adjust the maximum number of retries as needed
+    const retryInterval = 300; // Adjust the retry interval in milliseconds
 
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const response = await axios.get(url);
-      if (response.status === 200) {
-        return true; // File is available
-      }
-    } catch (error) {
-      console.error(`Error checking file availability: ${error.message}`);
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await axios.get(url);
+            if (response.status === 200) {
+                return true; // File is available
+            }
+        } catch (error) {
+            console.error(`Error checking file availability: ${error.message}`);
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, retryInterval));
     }
 
-    await new Promise(resolve => setTimeout(resolve, retryInterval));
-  }
-
-  return false;
+    return false;
 }
-
 
 exports.checkUploadClothPic = [
     body().custom((value, { req }) => {
@@ -46,16 +45,16 @@ exports.uploadClothPic = asyncHandler(async (req, res) => {
 
     const isAvailable = await checkFileAvailability(imageURL);
 
-    if(isAvailable){
+    if (isAvailable) {
         const result = await classifyImage(imageURL);
-    
+
         const newTransaction = await Transaction.create({
             userId: userId,
             clothing: result.item,
             image: imageURL,
             carbonScore: result.score,
         });
-    
+
         const updatedUserDoc = await User.findByIdAndUpdate(userId, {
             $inc: {
                 ecoScore: result.score,
@@ -66,7 +65,7 @@ exports.uploadClothPic = asyncHandler(async (req, res) => {
                 },
             },
         });
-    
+
         return res.status(200).json({
             message: "Transaction Done Successfully",
             url: imageURL,
