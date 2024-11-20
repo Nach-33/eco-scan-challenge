@@ -1,28 +1,30 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const errorHandler = require("./middlewares/errorHandler")
+const errorHandler = require("./middlewares/errorHandler");
 const dbConnect = require("./db/connect");
 require("dotenv").config();
 
-app.use(cors({
-  origin: process.env.FRONTEND_URI
-}));
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URI,
+    })
+);
 
 app.use(express.json());
 
 app.use("/api", require("./routes"));
 
-app.use(errorHandler)
+app.use(errorHandler);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI;
 
-const startServer = async() => {
+const startServer = async () => {
     await dbConnect(MONGO_URI);
     app.listen(PORT, () => {
-      console.log("Server Running on Port ", PORT);
+        console.log("Server Running on Port ", PORT);
     });
-}
+};
 
 startServer();

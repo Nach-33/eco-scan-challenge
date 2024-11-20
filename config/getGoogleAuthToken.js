@@ -46,18 +46,21 @@ exports.userRegisterLogin = asyncHandler(async (req, res) => {
   if (user_exist) {
     const token = generateJwtToken({ id: user_exist._id, isAdmin: user_exist.isAdmin});
 
-    return res.json({ message: "User Logged in", data: token });
+    return res.redirect(process.env.FRONTEND_URI + `/auth/token?code=${token}`);
+    // return res.json({ message: "User Logged in", data: token });
   }
-
+  
   const user = await User.create({
     name: googleUser.name,
     username: googleUser.given_name
-      ? googleUser.given_name + Date.now()
-      : googleUser.name.split(" ").join("_") + Date.now(),
+    ? googleUser.given_name + Date.now()
+    : googleUser.name.split(" ").join("_") + Date.now(),
     email: googleUser.email,
   });
-
+  
   const token = generateJwtToken({ id: user._id, isAdmin: false});
-
-  return res.json({ message: "User Registered", data: token });
+  
+  
+  return res.redirect(process.env.FRONTEND_URI + `/auth/token?code=${token}`);
+  // return res.json({ message: "User Registered", data: token });
 });

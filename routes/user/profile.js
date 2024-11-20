@@ -11,12 +11,14 @@ router.route('/').get(
 
     getLoggedInUserData
 )
+
 router.route('/username/:username').get(
     checkGetUserByUsername,
     validateRequestBody,
     
     getUserDataByUsername
 )
+
 router.route('/id/:userId').get(
     checkGetUserById,
     validateRequestBody,
