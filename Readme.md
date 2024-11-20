@@ -7,7 +7,7 @@ EcoScan is a web application designed to help users understand the environmental
 ## 🔧 Tech Stack
 - **Frontend**: React
 - **Backend**: Nodejs with Expressjs
-- **Image Recognition**: TBD
+- **Image Recognition**: Hugging Face Xenova Transformer
 
 ---
 
@@ -27,6 +27,9 @@ EcoScan is a web application designed to help users understand the environmental
    pip install -r requirements.txt   # if using Python for backend dependencies
    ```
 
+3. **Setup Environment Variables**
+   Create .env files and provide your environment variables.
+
 3. **Run the Application**
    - **Backend**: Start the backend server:
      ```bash
@@ -36,7 +39,6 @@ EcoScan is a web application designed to help users understand the environmental
      ```bash
      npm run start   # or `streamlit run app.py` if using Streamlit
      ```
-
 ---
 <!-- 
 ## 🌱 Carbon Score Assumptions
