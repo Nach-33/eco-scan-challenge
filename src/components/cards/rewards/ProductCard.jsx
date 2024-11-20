@@ -57,7 +57,7 @@ const ProductCard = ({ productData, userEP }) => {
     const redeemRewardItem = async (rewardItemId) => {
         const {redeemRewardItem, error} = await redeemReward(rewardItemId);
 
-        window.location.reload();
+        window.location.href = "/";
 
         setOpenSnackbar(true);
     }
