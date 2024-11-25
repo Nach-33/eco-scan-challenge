@@ -5,27 +5,34 @@ const User = require("../../models/User");
 const Transaction = require("../../models/Transaction");
 const { body } = require("express-validator");
 const ErrorResponse = require("../../utils/ErrorResponse");
-const axios = require("axios");
+const fs = require("fs");
 
-async function checkFileAvailability(url) {
-    const maxRetries = 10; // Adjust the maximum number of retries as needed
-    const retryInterval = 300; // Adjust the retry interval in milliseconds
+const getFileExtension = (filename) => {
+    return filename.split(".").slice(-1);
+};
 
-    for (let i = 0; i < maxRetries; i++) {
-        try {
-            const response = await axios.get(url);
-            if (response.status === 200) {
-                return true; // File is available
+const downloadFile = (buffer, file_path) => {
+    const data = buffer;
+    return new Promise((resolve, reject) => {
+        fs.writeFile(file_path, data, (err) => {
+            if (err) {
+                return reject();
             }
-        } catch (error) {
-            console.error(`Error checking file availability: ${error.message}`);
-        }
+            return resolve();
+        });
+    });
+};
 
-        await new Promise((resolve) => setTimeout(resolve, retryInterval));
-    }
-
-    return false;
-}
+const deleteFile = (file_path) => {
+    return new Promise((resolve, reject) => {
+        fs.unlink(file_path, (err) => {
+            if (err) {
+                reject();
+            }
+            return resolve();
+        });
+    });
+};
 
 exports.checkUploadClothPic = [
     body().custom((value, { req }) => {
@@ -43,35 +50,35 @@ exports.uploadClothPic = asyncHandler(async (req, res) => {
 
     const imageURL = fileUpload(image, imageTitle);
 
-    const isAvailable = await checkFileAvailability(imageURL);
+    const imageFileName = `clothImage.${getFileExtension(image.originalname)}`;
 
-    if (isAvailable) {
-        const result = await classifyImage(imageURL);
+    await downloadFile(image.buffer, imageFileName);
 
-        const newTransaction = await Transaction.create({
-            userId: userId,
-            clothing: result.item,
-            image: imageURL,
-            carbonScore: result.score,
-        });
+    const result = await classifyImage(`./${imageFileName}`);
 
-        const updatedUserDoc = await User.findByIdAndUpdate(userId, {
-            $inc: {
-                ecoScore: result.score,
+    const newTransaction = await Transaction.create({
+        userId: userId,
+        clothing: result.item,
+        image: imageURL,
+        carbonScore: result.score,
+    });
+
+    const updatedUserDoc = await User.findByIdAndUpdate(userId, {
+        $inc: {
+            ecoScore: result.score,
+        },
+        $push: {
+            transactions: {
+                transaction_id: newTransaction._id,
             },
-            $push: {
-                transactions: {
-                    transaction_id: newTransaction._id,
-                },
-            },
-        });
+        },
+    });
 
-        return res.status(200).json({
-            message: "Transaction Done Successfully",
-            url: imageURL,
-            result: result,
-        });
-    }
+    await deleteFile(`./${imageFileName}`);
 
-    throw new ErrorResponse("Image File Not Uploaded Successfully");
+    return res.status(200).json({
+        message: "Transaction Done Successfully",
+        url: imageURL,
+        result: result,
+    });
 });
