@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 // material-ui
 import List from '@mui/material/List';
@@ -13,17 +13,17 @@ import ProfileOutlined from '@ant-design/icons/ProfileOutlined';
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import WalletOutlined from '@ant-design/icons/WalletOutlined';
+import { AuthContext } from '../../../../../contexts/AuthContext';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab() {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const {dispatch} = useContext(AuthContext)
 
   const handleLogout = () => {
     localStorage.clear("auth-token");
-    localStorage.clear("username");
-    localStorage.clear("name");
-    localStorage.clear("profile_pic");
+    dispatch("LOGOUT", {});
     window.location.reload();
   }
 

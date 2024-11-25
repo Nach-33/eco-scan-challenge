@@ -10,14 +10,17 @@ import Typography from '@mui/material/Typography';
 import MainCard from 'components/MainCard';
 import ComponentSkeleton from './ComponentSkeleton';
 import ImageUpload from 'components/cards/upload/ImageUpload';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
 
 // ==============================|| COMPONENTS - TYPOGRAPHY ||============================== //
 
 export default function ComponentTransactions() {
 
+    const {user} = useContext(AuthContext);
+
     useEffect(() => {
-        if(!localStorage.getItem("auth-token")){
+        if(!user){
             window.location.href = "/auth/login"
         }
     },[])

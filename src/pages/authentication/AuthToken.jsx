@@ -10,12 +10,7 @@ import { getLoggedInUserData } from 'api/user/profile';
 
 const goToDashboard = async () => {
     const { userDataDoc } = await getLoggedInUserData();
-
-    localStorage.setItem("username", userDataDoc.username);
-    localStorage.setItem("name", userDataDoc.name);
-    localStorage.setItem("profile_pic", userDataDoc.profile_pic);
     location.href = import.meta.env.VITE_APP_FRONTEND_URI;
-
 };
 
 function useQuery() {

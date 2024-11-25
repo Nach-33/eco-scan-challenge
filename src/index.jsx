@@ -30,12 +30,17 @@ import '@fontsource/public-sans/700.css';
 // project import
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthContextProvider } from './contexts/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // ==============================|| MAIN - REACT DOM RENDER ||============================== //
 
-root.render(<App />);
+root.render(
+    <AuthContextProvider>
+        <App />
+    </AuthContextProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

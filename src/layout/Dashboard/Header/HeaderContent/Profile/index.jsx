@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -30,6 +30,7 @@ import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import LoginButton from 'components/buttons/LoginButton';
+import { AuthContext } from '../../../../../contexts/AuthContext';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -50,6 +51,8 @@ function a11yProps(index) {
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 export default function Profile() {
+
+  const {user, dispatch} = useContext(AuthContext);
   const theme = useTheme();
 
   const anchorRef = useRef(null);
@@ -67,9 +70,7 @@ export default function Profile() {
 
   const handleLogout = () => {
     localStorage.clear("auth-token");
-    localStorage.clear("username");
-    localStorage.clear("name");
-    localStorage.clear("profile_pic");
+    dispatch("LOGOUT", {});
     window.location.reload();
   }
 
@@ -84,7 +85,7 @@ export default function Profile() {
   return (
     <>
     {
-      localStorage.getItem("auth-token") ? 
+      user ? 
       <Box sx={{ flexShrink: 0, ml: 0.75 }}>
         <ButtonBase
           sx={{
@@ -101,10 +102,10 @@ export default function Profile() {
           onClick={handleToggle}
         >
           <Stack direction="row" spacing={1.25} alignItems="center" sx={{ p: 0.5 }}>
-            <Avatar alt="profile user" src={localStorage.getItem('profile_pic') || avatar1} size="sm" />
+            <Avatar alt="profile user" src={user.profile_pic || avatar1} size="sm" />
             <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
               {
-                localStorage.getItem('username') || ""
+                user.username || ""
               }
             </Typography>
           </Stack>
@@ -136,16 +137,16 @@ export default function Profile() {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Avatar alt="profile user" src={localStorage.getItem("profile_pic") || avatar1} sx={{ width: 32, height: 32 }} />
+                            <Avatar alt="profile user" src={user.profile_pic || avatar1} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">
                                 {
-                                  localStorage.getItem('username') || ""
+                                  user.username || ""
                                 }
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
                                 {
-                                  localStorage.getItem('name') || ""
+                                  user.name || ""
                                 }
                               </Typography>
                             </Stack>

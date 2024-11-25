@@ -1,38 +1,26 @@
 // material-ui
 import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 // project import
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
-import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
-import UniqueVisitorCard from './UniqueVisitorCard';
-import SaleReportCard from './SaleReportCard';
 import OrdersTable from './OrdersTable';
 
 // assets
-import GiftOutlined from '@ant-design/icons/GiftOutlined';
-import MessageOutlined from '@ant-design/icons/MessageOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
-import avatar1 from 'assets/images/users/avatar-1.png';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getLoggedInUserData } from 'api/user/profile';
 import { PacmanLoader } from 'react-spinners';
 import HowItWorksCard from 'components/cards/dashboard/HowItWorks';
+import { AuthContext } from '../../contexts/AuthContext';
 
 // avatar style
 const avatarSX = {
@@ -64,14 +52,14 @@ export default function DashboardDefault() {
 
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const { user, dispatch } = useContext(AuthContext)
 
   const getUserData = async () => {
     const { userDataDoc } = await getLoggedInUserData();
 
     if (userDataDoc) {
-      localStorage.setItem("username", userDataDoc.username);
-      localStorage.setItem("name", userDataDoc.name);
-      localStorage.setItem("profile_pic", userDataDoc.profile_pic);
+
+      dispatch({ type: 'LOGIN', payload: userDataDoc });
 
       setUserData(userDataDoc);
     }
@@ -87,7 +75,7 @@ export default function DashboardDefault() {
   }, [])
 
   useEffect(() => {
-    if (userData || !localStorage.getItem("auth-token")) {
+    if (userData || user) {
       setLoading(false);
     }
   }, [userData])
